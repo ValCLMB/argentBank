@@ -1,4 +1,4 @@
-import { Account } from "../Account/Account";
+import { Account } from "../../components/Account/Account";
 import "./User.css";
 
 const accounts = [

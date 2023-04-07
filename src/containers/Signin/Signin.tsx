@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { add } from "../../features/tokenSlice";
-import type { RootState } from "../../store";
 
 export const Signin = () => {
     const dispatch = useDispatch();

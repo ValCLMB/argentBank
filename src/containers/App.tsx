@@ -1,6 +1,6 @@
 import { Footer } from "../components/Footer/Footer";
 import { Header } from "../components/Header/Header";
-import { User } from "../components/User/User";
+import { User } from "./User/User";
 import "./App.css";
 import { Home } from "./Home/Home";
 import { Signin } from "./Signin/Signin";
