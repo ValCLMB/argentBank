@@ -1,7 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import "./Header.css";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../store";
+
 export const Header = () => {
+    const token = useSelector((state: RootState) => state.token);
+
     return (
         <nav className="main-nav">
             <a className="main-nav-logo" href="/">
