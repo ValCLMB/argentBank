@@ -1,11 +1,14 @@
 import "./Signin.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch, useSelector } from "react-redux";
-import { add } from "../../features/tokenSlice";
+import { useEffect } from "react";
 
 export const Signin = () => {
-    const dispatch = useDispatch();
+    useEffect(() => {
+        if (localStorage.getItem("token")) {
+            window.location.pathname = "/user";
+        }
+    }, []);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -22,7 +25,7 @@ export const Signin = () => {
             .then((res) => res.json())
             .then((res) => {
                 if (res.status === 200) {
-                    dispatch(add(res.body.token));
+                    localStorage.setItem("token", res.body.token);
                     window.location.pathname = "/user";
                 }
             });

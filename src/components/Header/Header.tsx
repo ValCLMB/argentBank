@@ -1,27 +1,44 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+    faRightFromBracket,
+    faUserCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import "./Header.css";
 import { useSelector } from "react-redux";
-import type { RootState } from "../../store";
+import { RootState } from "../../store";
+import { Link } from "react-router-dom";
 
 export const Header = () => {
-    const token = useSelector((state: RootState) => state.token);
+    const { user } = useSelector((state: RootState) => state);
+    const linkToSign = user.firstName ? "/user" : "/signin";
+    const linkToHome = user.firstName ? "/user" : "";
+
+    const signout = () => {
+        localStorage.clear();
+        window.location.pathname = "/signin";
+    };
 
     return (
         <nav className="main-nav">
-            <a className="main-nav-logo" href="/">
+            <Link className="main-nav-logo" to={linkToHome}>
                 <img
                     className="main-nav-logo-image"
                     src="./img/argentBankLogo.png"
                     alt="Argent Bank Logo"
                 />
                 <h1 className="sr-only">Argent Bank</h1>
-            </a>
+            </Link>
             <div>
-                <a className="main-nav-item" href="./signin">
+                <Link className="main-nav-item" to={linkToSign}>
                     <FontAwesomeIcon icon={faUserCircle} />
-                    Sign In
-                </a>
+                    {user.firstName ? user.firstName : "Sign in"}
+                </Link>
+                {user.firstName ? (
+                    <div className="main-nav-item" onClick={signout}>
+                        <FontAwesomeIcon icon={faRightFromBracket} />
+                        Sign Out
+                    </div>
+                ) : null}
             </div>
         </nav>
     );

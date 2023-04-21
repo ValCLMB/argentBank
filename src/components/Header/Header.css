@@ -26,10 +26,17 @@
 .main-nav a.router-link-exact-active {
     color: #42b983;
 }
-
+.main-nav > div {
+    display: flex;
+    gap: 15px;
+}
 .main-nav-item {
+    cursor: pointer;
     text-decoration: none;
     margin-right: 0.5rem;
+}
+.main-nav-item svg {
+    margin-right: 5px;
 }
 
 .main-nav-item:hover {

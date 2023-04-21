@@ -1,5 +1,9 @@
+import { useDispatch, useSelector } from "react-redux";
 import { Account } from "../../components/Account/Account";
 import "./User.css";
+import { RootState } from "../../store";
+import { useEffect } from "react";
+import { addUser } from "../../features/userSlice";
 
 const accounts = [
     {
@@ -19,6 +23,30 @@ const accounts = [
     },
 ];
 export const User = () => {
+    const dispatch = useDispatch();
+    const { user } = useSelector((state: RootState) => state);
+
+    useEffect(() => {
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+
+        fetch(import.meta.env.VITE_API + "/user/profile", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+            },
+            signal,
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                res.status === 200
+                    ? dispatch(addUser(res.body))
+                    : console.log("error");
+            });
+
+        return () => abortController.abort();
+    }, []);
     return (
         <main className="main bg-dark">
             <div className="header">
@@ -31,6 +59,7 @@ export const User = () => {
             </div>
             {accounts.map((account) => (
                 <Account
+                    key={account.title}
                     title={account.title}
                     amount={account.amount}
                     description={account.description}
