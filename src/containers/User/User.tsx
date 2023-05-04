@@ -4,7 +4,9 @@ import "./User.css";
 import { RootState } from "../../store";
 import { useEffect, useState } from "react";
 import { addUser } from "../../features/userSlice";
+import { getUser, postPut } from "../../http-service";
 
+type User = { firstName: string; lastName: string };
 const accounts = [
     {
         title: "Argent Bank Checking (x8349) ",
@@ -32,24 +34,18 @@ export const User = () => {
         const target = e.target as HTMLFormElement;
 
         const { firstName, lastName } = target;
-        const data = { firstName: firstName.value, lastName: lastName.value };
 
-        fetch(import.meta.env.VITE_API + "/user/profile", {
-            method: "PUT",
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                console.log(res);
-                if (res.status !== 200) {
-                    throw new Error(res.message);
-                }
-                setIsEdit(false);
-            });
+        const data: User = {
+            firstName: firstName.value,
+            lastName: lastName.value,
+        };
+
+        postPut("/user/profile", "PUT", data).then((res) => {
+            if (res.status !== 200) {
+                throw new Error(res.message);
+            }
+            setIsEdit(false);
+        });
     };
 
     // GET USER
@@ -57,23 +53,14 @@ export const User = () => {
         const abortController = new AbortController();
         const signal = abortController.signal;
 
-        fetch(import.meta.env.VITE_API + "/user/profile", {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                "Content-Type": "application/json",
-            },
-            signal,
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                if (res.status === 200) {
-                    dispatch(addUser(res.body));
-                } else {
-                    window.location.pathname = "/";
-                    throw new Error(res.message);
-                }
-            });
+        getUser(signal).then((res) => {
+            if (res.status === 200) {
+                dispatch(addUser(res.body));
+            } else {
+                window.location.pathname = "/";
+                throw new Error(res.message);
+            }
+        });
 
         return () => abortController.abort();
     }, [editUser]);
