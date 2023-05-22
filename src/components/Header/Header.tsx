@@ -15,7 +15,7 @@ export const Header = () => {
 
     const signout = () => {
         localStorage.clear();
-        window.location.pathname = "/signin";
+        window.location.pathname = "/";
     };
 
     return (
